@@ -25,10 +25,10 @@ GitHub: cucumber-turtle
 | Date | Objectives | Due date | Item due | Conflicts | Tasks|
 | --- | --- | --- | --- | --- | --- |
 | ... | Starting and planning of the project. | 4th June | Testing code | COMP112 6-7 or 7. | | [All] Complete AVC plan   \n
-Sam M - SFML install testing. Write test cases for the team  \n
-Sam M- Ensures Plan is done. Help to install SFML for the team.          \n
-Reilly- Ensure Robot is built.    \n
-Reilly- Get/save pictures from the input. \n |
+Sam M - SFML install testing. Write test cases for the team.
+Sam M- Ensures Plan is done. Help to install SFML for the team.
+Reilly- Ensure Robot is built.
+Reilly- Get/save pictures from the input. |
 |4th June| Efficiently and uniformly implementing Robot behaviour to specifications. | 11th June | Core & Completion code | CONFLICTS HERE... |
 [ALL] Uniform input and effort.
 Reilly - General structure and algorithm building.
