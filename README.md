@@ -7,20 +7,23 @@ User info and roles:
 [Project Manager]
 RN: Sam Milburn, UN: milbursamu, ID: 300509843, E: sammilburn1916@gmail.com,
 GitHub: the-hacker-known-as-anonymous
+
 [Software Architect]
 RN: Reilly Oldham UN: oldhamreil, ID: 300534051, E: oldhamreil@myvuw.ac.nz, 
 Github: ProRedCat
+
 [Developer]
 RN: Tyler Andrews, UN: andrewtyle, ID: 300425252, E: tyler.andrews.home@gmail.com, 
 GitHub: Got-any-pizza
+
 [Developer]
 RN: Joud Asfari, UN: asfarijoud, ID: 300448284, E: joudzasfari@gmail.com, 
 GitHub: cucumber-turtle
 
+
 | Date | Objectives | Due date | Item due | Conflicts | Tasks|
 | --- | --- | --- | --- | --- | --- |
-| ... | Starting and planning of the project. | 4th June | Testing code | COMP112 6-7 or 7. | 
-[All] Complete AVC plan
+| ... | Starting and planning of the project. | 4th June | Testing code | COMP112 6-7 or 7. | [All] Complete AVC plan
 Sam M - SFML install testing. Write test cases for the team
 Sam M- Ensures Plan is done. Help to install SFML for the team.
 Reilly- Ensure Robot is built.
