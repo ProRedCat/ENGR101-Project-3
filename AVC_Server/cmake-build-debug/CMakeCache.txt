@@ -265,9 +265,6 @@ Ogg_LIB:FILEPATH=C:/Users/Reilly/Documents/mingw64/lib/libogg.a
 //Path to a library.
 OpenAL_LIB:FILEPATH=C:/Users/Reilly/Documents/mingw64/lib/libopenal32.a
 
-//Path to a library.
-OpenGL_LIB:FILEPATH=OpenGL_LIB-NOTFOUND
-
 //The directory containing a CMake configuration file for SFML.
 SFML_DIR:PATH=C:/Users/Reilly/Documents/mingw64/lib/cmake/SFML
 
@@ -460,8 +457,6 @@ FreeType_LIB-ADVANCED:INTERNAL=1
 Ogg_LIB-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: OpenAL_LIB
 OpenAL_LIB-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: OpenGL_LIB
-OpenGL_LIB-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: VorbisEnc_LIB
 VorbisEnc_LIB-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: VorbisFile_LIB
