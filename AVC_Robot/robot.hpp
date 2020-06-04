@@ -166,12 +166,12 @@ int OpenPPMFile(std::string filename,ImagePPM& image){
 
 /**********NETWORK****/
 
-sf::TcpSocket socket2;
+sf::TcpSocket socket;
 sf::Packet packet;
 
 int connectNetwork(){
    
-   sf::Socket::Status status = socket2.connect("127.0.0.1", 53000);
+   sf::Socket::Status status = socket.connect("127.0.0.1", 53000);
    if (status != sf::Socket::Done)  {
        std::cout<<"Error socket"<<std::endl;
        return -1;
@@ -190,14 +190,14 @@ int takePicture(){
     double value3 = 0.0;
     // fill the packet
 	packet<<command<<text<<value<<value1<<value2<<value3;
-    if (socket2.send(packet) != sf::Socket::Done)  {
+    if (socket.send(packet) != sf::Socket::Done)  {
           std::cout<<" Error sending"<<std::endl;
     } else {
 	  // std::cout<<" Send OK"<<std::endl;
 	}
 	
 	sf::Packet receivePacket;
-    if (socket2.receive(receivePacket) != sf::Socket::Done){ // non blocking
+    if (socket.receive(receivePacket) != sf::Socket::Done){ // non blocking
            std::cout<<" Nothing received"<<std::endl;
           return -1;
     } else {
@@ -239,7 +239,7 @@ int setMotors(double vLeft, double vRight){
     // fill the packet
     packet.clear();
 	packet<<command<<text<<value<<value1<<value2<<value3;
-    if (socket2.send(packet) != sf::Socket::Done)  {
+    if (socket.send(packet) != sf::Socket::Done)  {
          std::cout<<" Error sending"<<std::endl;
     } 
 

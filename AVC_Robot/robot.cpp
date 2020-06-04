@@ -24,8 +24,7 @@ int main() {
                 if (get_pixel(cameraView, x, y, 3) > 230) {
                     totalYWhite += y; //Add the y value for finding average y position
                     whitePixelCount++; //Increase pixel count for finding average y position
-                }
-                else if(get_pixel(cameraView, x, y, 3) < 5){
+                } else if (get_pixel(cameraView, x, y, 3) < 5) {
                     blackPixelCount++;
                 }
             }
@@ -33,8 +32,9 @@ int main() {
 
         double yPos = totalYWhite / whitePixelCount; //Calculate average y position of line
 
-        if(blackPixelCount <= 10){
-            if ((yPos > 75 && (yPos - 10 < 75)) || (yPos < 75 && (yPos + 10 > 75))) { //Check if the robot is pointing generally at the line
+        if (blackPixelCount <= 10) {
+            if ((yPos > 75 && (yPos - 10 < 75)) ||
+                (yPos < 75 && (yPos + 10 > 75))) { //Check if the robot is pointing generally at the line
                 vLeft = 40;
                 vRight = 40;
             } else if (yPos < 75) { //If the robot if pointing left of the line turn right
@@ -43,12 +43,11 @@ int main() {
             } else if (yPos > 75) { //If the robot is pointing right of the line turn left
                 vLeft = 20;
                 vRight = 5;
-            }else{
+            } else {
                 vLeft = 0;
                 vRight = 20;
             }
-        }
-        else{
+        } else {
             vLeft = 0;
             vRight = 0;
         }
