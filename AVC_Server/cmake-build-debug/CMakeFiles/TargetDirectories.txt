@@ -1,3 +1,0 @@
-C:/Users/Reilly/Documents/School/Victoria University/ENGR101/Project 3/AVC_Server/cmake-build-debug/CMakeFiles/AVC_Server.dir
-C:/Users/Reilly/Documents/School/Victoria University/ENGR101/Project 3/AVC_Server/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Reilly/Documents/School/Victoria University/ENGR101/Project 3/AVC_Server/cmake-build-debug/CMakeFiles/rebuild_cache.dir

@@ -1,3 +1,0 @@
-"C:\Program Files\JetBrains\CLion 2020.1\bin\cmake\win\bin\cmake.exe" -E remove -f CMakeFiles\AVC_Server.dir/objects.a
-C:\Users\Reilly\Documents\mingw64\bin\ar.exe cr CMakeFiles\AVC_Server.dir/objects.a @CMakeFiles\AVC_Server.dir\objects1.rsp
-C:\Users\Reilly\Documents\mingw64\bin\g++.exe -g   -Wl,--whole-archive CMakeFiles\AVC_Server.dir/objects.a -Wl,--no-whole-archive  -o AVC_Server.exe -Wl,--out-implib,libAVC_Server.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\AVC_Server.dir\linklibs.rsp
