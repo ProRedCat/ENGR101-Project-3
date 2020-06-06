@@ -1,4 +1,4 @@
-mazeFile,core.txt
+mazeFile,completion.txt
 robot.pos.x,10.0
 robot.pos.y,100.0
 robot.azimuth,0.0
