@@ -1,4 +1,7 @@
 #include "robot.hpp"
+#include <iostream>
+
+using namespace std;
 
 int main() {
     if (initClientRobot() != 0) { //Check if the robot was not initialised
@@ -10,42 +13,42 @@ int main() {
     double vRight = 0;
 
     while (true) { //Loop continuously
-        takePicture(); //Take a picture to update the robots view
+       takePicture(); //Take a picture to update the robots view
 
-        //Variables for finding average y position of the line
-        double totalYWhite = 0;
-        int whitePixelCount = 0;
+       //Variables for finding average y position of the line
+       double totalXWhite = 0;
+       int whitePixelCount = 0;
 
-        int blackPixelCount = 0;
+       int blackPixelCount = 0;
+        
 
-        //Image is rotated so y is width and x is height
-        for (int y = 0; y < cameraView.width; y++) { //Loop through all y pixels
-            for (int x = cameraView.height - 20; x < cameraView.height; x++) { //Loop through all x pixes
-                if (get_pixel(cameraView, x, y, 3) > 230) {
-                    totalYWhite += y; //Add the y value for finding average y position
-                    whitePixelCount++; //Increase pixel count for finding average y position
-                } else if (get_pixel(cameraView, x, y, 3) < 5) {
-                    blackPixelCount++;
-                }
+		for (int y = cameraView.height - 20; y < cameraView.height; y++) { //Loop through the y pixels from the height - 20 to height
+            for (int x = cameraView.width/3; x < cameraView.width - (cameraView.width - ((cameraView.width/3) * 2)); x++) { //Loop through the x pixels between 1/3 camera width and 2/3 camera width
+                if(get_pixel(cameraView, y, x, 3) > 230){ //Check if the pixel is white
+					totalXWhite += x; //Add x to totalXWhite
+					whitePixelCount++; //Incease the whitePixelCount by 1
+				}
+				else if (get_pixel(cameraView, x, y, 3) < 5) { //Check if pixel is black
+                    blackPixelCount++; //Increase blackPixelCount
+				}
             }
         }
 
-        double yPos = totalYWhite / whitePixelCount; //Calculate average y position of line
+        double xPos = totalXWhite / whitePixelCount; //Calculate average x position of the line
 
         if (blackPixelCount <= 10) {
-            if ((yPos > 75 && (yPos - 10 < 75)) ||
-                (yPos < 75 && (yPos + 10 > 75))) { //Check if the robot is pointing generally at the line
+            if ((xPos > cameraView.width/2 && (xPos - 10 < cameraView.width/2)) || (xPos < cameraView.width/2 && (xPos + 10 > cameraView.width/2))) { //Check if the robot is pointing generally at the line
                 vLeft = 40;
                 vRight = 40;
-            } else if (yPos < 75) { //If the robot if pointing left of the line turn right
-                vLeft = 5;
-                vRight = 20;
-            } else if (yPos > 75) { //If the robot is pointing right of the line turn left
-                vLeft = 20;
-                vRight = 5;
-            } else {
+            } else if (xPos < cameraView.width/2) { //If the robot if pointing left of the line turn right
+               vLeft = 0;
+               vRight = 10;
+            } else if (xPos > cameraView.width/2) { //If the robot is pointing right of the line turn left
+                vLeft = 10;
+                vRight = 0;
+            } else { //If the robot cannot find a line, spin fast to try and aquire it
                 vLeft = 0;
-                vRight = 20;
+                vRight = 50;
             }
         } else {
             vLeft = 0;
