@@ -86,8 +86,8 @@ int main() {
                 vLeft = 10;
                 vRight = 0;
             } else { //If the robot cannot find a line, spin fast to try and aquire it
-                vLeft = 0;
-                vRight = 150;
+                vLeft = -50;
+                vRight = 50;
             }
             
             
