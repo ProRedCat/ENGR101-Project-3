@@ -19,7 +19,7 @@ struct colorVars{
 }camVARS;
 
 enum loopType{
-	//Determines which
+	//Determines which part of the view to read
 	TOTAL,
 	RIGHT,
 	LEFT
@@ -81,9 +81,9 @@ void senseDirection(double &XPOS, double &Right, double &Left){
 		Right 	= 40;
 	} else if (XPOS < cameraView.width/2) { //If the robot is pointing right of the line turn left
 		Left 	= 0;
-		Right 	= 694/4;
+		Right 	= 10;
 		} else if (XPOS > cameraView.width/2) { //If the robot is pointing left of the line turn right
-			Left 	= 694/4;
+			Left 	= 10;
 			Right 	= 0;
 		} else { //If the robot cannot find a line, spin fast to try and acquire it
 			Left 	= -50;
@@ -133,7 +133,7 @@ int main() {
 			}
 			else{ //Else check if the robot should turn right or left
 				if(turnRight && turningLeft == false){ //Robot pivots on right wheel
-					int containsWhite = false;
+					bool containsWhite = false;
 					for (int y = cameraView.height - 20; y < cameraView.height - 10; y++) { //Loop through the y pixels from the height - 20 to height - 10
 						for (int x = cameraView.width/3; x < cameraView.width - (cameraView.width - ((cameraView.width/3) * 2)); x++) { //Loop through the x pixels between 1/3 camera width and 2/3 camera width
 							if(get_pixel(cameraView, y, x, 3) > 230){ //Check if the pixel is white
