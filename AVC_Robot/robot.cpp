@@ -25,6 +25,11 @@ enum loopType{
 	LEFT
 };
 
+bool mazeMode = false;
+
+bool mazeTurningRight = false;
+bool mazeTurningLeft = false;
+
 void camLoop(loopType LT, bool &Right, bool &Left){
 	//This function could be generalized but because
 	//of the x cases being all unique, there is no point.
@@ -75,6 +80,62 @@ void camLoop(loopType LT, bool &Right, bool &Left){
 	}
 }
 
+bool redCheck(){
+	bool hasRed = false;
+	for (int y = 0; y < cameraView.height; y++) { 
+		for (int x = 0; x < cameraView.width; x++) { 
+			if(get_pixel(cameraView, y, x, 0) > 230 && get_pixel(cameraView, y, x, 0) > max(get_pixel(cameraView, y, x, 1), get_pixel(cameraView, y, x, 2))){ //Check if the pixel is white
+				hasRed = true;
+			}
+		}
+	}
+	
+	return hasRed;
+}
+
+
+/*
+ * Function to check if there is a maze line to the left
+ */
+bool leftWallCheck(){
+	bool hasRed = false;
+	for (int y = cameraView.height/2.0 + 10; y < cameraView.height; y++) { //Loop thorugh the height of the camera
+		for (int x = 0; x < 15; x++) { //Loop through the pixels from 0 to the width of the line
+			if(get_pixel(cameraView, y, x, 0) > 230 && get_pixel(cameraView, y, x, 0) > max(get_pixel(cameraView, y, x, 1), get_pixel(cameraView, y, x, 2)) * 2){ //Check if pixel is red
+				hasRed = true;
+			}
+		}
+	}
+	
+	return hasRed; //return if a line has been found
+}
+
+bool shiftedLeftWallCheck(){
+	bool hasRed = false;
+	for (int y = cameraView.height/2.0 + 10; y < cameraView.height; y++) { //Loop thorugh the height of the camera
+		for (int x = 15; x < 30; x++) { //Loop through the pixels from 0 to the width of the line
+			if(get_pixel(cameraView, y, x, 0) > 230 && get_pixel(cameraView, y, x, 0) > max(get_pixel(cameraView, y, x, 1), get_pixel(cameraView, y, x, 2)) * 2){ //Check if pixel is red
+				hasRed = true;
+			}
+		}
+	}
+	
+	return hasRed; //return if a line has been found
+}
+
+bool frontWallCheck(){
+	bool hasRed = false;
+	for (int y = cameraView.height/2.0; y < cameraView.height/2.0 + 10; y++) { //Loop thorugh the height of the camera
+		for (int x = cameraView.width/4.0; x < (cameraView.width/4.0) * 3; x++) { //Loop through the pixels from 0 to the width of the line
+			if(get_pixel(cameraView, y, x, 0) > 230 && get_pixel(cameraView, y, x, 0) > max(get_pixel(cameraView, y, x, 1), get_pixel(cameraView, y, x, 2)) * 2){ //Check if pixel is red
+				hasRed = true;
+			}
+		}
+	}
+	
+	return hasRed; //return if a line has been found
+}
+
 void senseDirection(double &XPOS, double &Right, double &Left){
 	if ((XPOS > cameraView.width/2 && (XPOS - 5 < cameraView.width/2)) || (XPOS < cameraView.width/2 && (XPOS + 5 > cameraView.width/2))) { //Check if the robot is pointing generally at the line
 		Left 	= 40;
@@ -82,12 +143,35 @@ void senseDirection(double &XPOS, double &Right, double &Left){
 	} else if (XPOS < cameraView.width/2) { //If the robot if pointing right of the line turn left
 		Left 	= 0;
 		Right 	= 15;
-		} else if (XPOS > cameraView.width/2) { //If the robot is pointing left of the line turn right
-			Left 	= 15;
-			Right 	= 0;
-		} else { //If the robot cannot find a line, spin fast to try and acquire it
+	} else if (XPOS > cameraView.width/2) { //If the robot is pointing left of the line turn right
+		Left 	= 15;
+		Right 	= 0;
+	} else { //If the robot cannot find a line check if it has entered a maze or if it needs to turn around
+		if(mazeMode){ //Check if the robot has entered the maze
+			if(!leftWallCheck()){ //Check if there is not a wall to the left, if so turn left
+				Left = 20;
+				Right = 28;
+			}
+			else if(frontWallCheck()){ //Check if there is a wall infront of the robot, if so do a 90 degree turn
+				Left = 40;
+				Right = -40;
+			}
+			else if(shiftedLeftWallCheck()){ //Check if the wall is shifted over, if so turn right to correct
+				Left = 28;
+				Right = 20;
+			}
+			else{ //Else go forwards
+				Left = 40;
+				Right = 40;
+			}
+		}
+		else if(redCheck){ //If there are no white lines check if there is red to follow
+			mazeMode = true;
+		}
+		else{ //Else there is no red to follow so turn around to aquire the line again
 			Left 	= -50;
-			Right 	= 50;
+			Right 	= 50;	
+		}
 	}
 }
 
