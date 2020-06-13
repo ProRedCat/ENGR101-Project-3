@@ -97,10 +97,10 @@ bool redCheck(){
 /*
  * Function to check if there is a maze line to the left
  */
-bool leftSideCheck(){
+bool leftWallCheck(){
 	bool hasRed = false;
-	for (int y = 0; y < cameraView.height; y++) { //Loop thorugh the height of the camera
-		for (int x = 0; x < 14; x++) { //Loop through the pixels from 0 to the width of the line
+	for (int y = cameraView.height/2.0 + 10; y < cameraView.height; y++) { //Loop thorugh the height of the camera
+		for (int x = 0; x < 15; x++) { //Loop through the pixels from 0 to the width of the line
 			if(get_pixel(cameraView, y, x, 0) > 230 && get_pixel(cameraView, y, x, 0) > max(get_pixel(cameraView, y, x, 1), get_pixel(cameraView, y, x, 2)) * 2){ //Check if pixel is red
 				hasRed = true;
 			}
@@ -110,20 +110,30 @@ bool leftSideCheck(){
 	return hasRed; //return if a line has been found
 }
 
-/*
- * Function to check if there is a maze line to the right
- */
-bool rightSideCheck(){
+bool shiftedLeftWallCheck(){
 	bool hasRed = false;
-	for (int y = 0; y < cameraView.height; y++) {  //Loop thorugh the height of the camera
-		for (int x = cameraView.width - 14; x < cameraView.width; x++) { //Loop through the pixels from camera width - width of line to camera width
+	for (int y = cameraView.height/2.0 + 10; y < cameraView.height; y++) { //Loop thorugh the height of the camera
+		for (int x = 15; x < 30; x++) { //Loop through the pixels from 0 to the width of the line
 			if(get_pixel(cameraView, y, x, 0) > 230 && get_pixel(cameraView, y, x, 0) > max(get_pixel(cameraView, y, x, 1), get_pixel(cameraView, y, x, 2)) * 2){ //Check if pixel is red
 				hasRed = true;
 			}
 		}
 	}
 	
-	return hasRed; //Return if a line has been found
+	return hasRed; //return if a line has been found
+}
+
+bool frontWallCheck(){
+	bool hasRed = false;
+	for (int y = cameraView.height/2.0; y < cameraView.height/2.0 + 10; y++) { //Loop thorugh the height of the camera
+		for (int x = cameraView.width/4.0; x < (cameraView.width/4.0) * 3; x++) { //Loop through the pixels from 0 to the width of the line
+			if(get_pixel(cameraView, y, x, 0) > 230 && get_pixel(cameraView, y, x, 0) > max(get_pixel(cameraView, y, x, 1), get_pixel(cameraView, y, x, 2)) * 2){ //Check if pixel is red
+				hasRed = true;
+			}
+		}
+	}
+	
+	return hasRed; //return if a line has been found
 }
 
 void senseDirection(double &XPOS, double &Right, double &Left){
@@ -138,46 +148,19 @@ void senseDirection(double &XPOS, double &Right, double &Left){
 		Right 	= 0;
 	} else { //If the robot cannot find a line check if it has entered a maze or if it needs to turn around
 		if(mazeMode){ //Check if the robot has entered the maze
-			bool mazeTurnRight = !rightSideCheck(); //Check if the robot needs to turn right
-			bool mazeTurnLeft = !leftSideCheck(); //Check if the robot needs to turn left
-			
-			if(mazeTurningRight){ //If the robot is currently turning right
-				if(!mazeTurnLeft && !mazeTurnRight){ //Check if both sides of the maze are in view, if so stop turning and go in a straight line
-					mazeTurningRight = false;
-					
-					Left = 40;
-					Right = 40;
-				}
-				else{ //Else keep turning right
-					Left = 25;
-					Right = 15;
-				}
+			if(!leftWallCheck()){ //Check if there is not a wall to the left, if so turn left
+				Left = 20;
+				Right = 28;
 			}
-			else if(mazeTurningLeft){ //If the robot is currently turning left
-				if(!mazeTurnLeft && !mazeTurnRight){ //Check if both sides of the maze are in view, if so stop turning and go in a straight line
-					mazeTurningLeft = false;
-					
-					Left = 40;
-					Right = 40;
-				}
-				else{ //Else keep turning left
-					Left = 15;
-					Right = 25;
-				}
+			else if(frontWallCheck()){ //Check if there is a wall infront of the robot, if so do a 90 degree turn
+				Left = 40;
+				Right = -40;
 			}
-			else if(mazeTurnRight){ //Check if the robot should turn right, state the robot is turning, and turn
-				mazeTurningRight = true; 
-				
-				Left = 25;
-				Right = 15;
+			else if(shiftedLeftWallCheck()){ //Check if the wall is shifted over, if so turn right to correct
+				Left = 28;
+				Right = 20;
 			}
-			else if(mazeTurnLeft){ //Check if the robot should turn left, state the robot is turning, and turn
-				mazeTurningLeft = true;
-				
-				Left = 25;
-				Right = 15;
-			}
-			else{ //If it shouldn't turn at all go straight
+			else{ //Else go forwards
 				Left = 40;
 				Right = 40;
 			}
