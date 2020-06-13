@@ -6,13 +6,11 @@ using namespace std;
 struct colorVars{
 	double totalXWhite 		= 0.0;
 	int whitePixelCount 	= 0;
-	int blackPixelCount 	= 0;
 	int rightWhiteCount		= 0;
 	int leftWhiteCount 		= 0;
 	void clear(){
 		totalXWhite 		= 0.0;
 		whitePixelCount 	= 0;
-		blackPixelCount 	= 0;
 		rightWhiteCount		= 0;
 		leftWhiteCount 		= 0;
 	}
@@ -25,12 +23,9 @@ enum loopType{
 	LEFT
 };
 
-bool mazeMode = false;
+bool mazeMode = false; //Boolean for the state of the robot (default is maze navigation is off, only turned true when no white pixels can be found and there are red pixels in the screen)
 
-bool mazeTurningRight = false;
-bool mazeTurningLeft = false;
-
-void camLoop(loopType LT, bool &Right, bool &Left){
+void camLoop(loopType LT, bool &Right, bool &Left, bool &TurningRight, bool &TurningLeft){
 	//This function could be generalized but because
 	//of the x cases being all unique, there is no point.
 	switch(LT){
@@ -40,9 +35,6 @@ void camLoop(loopType LT, bool &Right, bool &Left){
 				if(get_pixel(cameraView, y, x, 3) > 230){ //Check if the pixel is white
 					camVARS.totalXWhite += x; //Add x to totalXWhite
 					camVARS.whitePixelCount++; //Increase the whitePixelCount by 1
-					}
-				else if (get_pixel(cameraView, x, y, 3) < 5) { //Check if pixel is black
-					camVARS.blackPixelCount++; //Increase blackPixelCount
 				}
 			}
 		}
@@ -71,20 +63,41 @@ void camLoop(loopType LT, bool &Right, bool &Left){
 	if(camVARS.rightWhiteCount > 0){
 		Right = true;
 	}else{
+		TurningRight = false;
 		Right = false;
 	}
 	if(camVARS.leftWhiteCount > 0){
 		Left = true;
 	}else{
+		TurningLeft = false;
 		Left = false;
 	}
 }
 
+/*
+ * Function for checking if there is black from the middle down of the camera view and between 1/4 and 3/4 width (detecting flag)
+ */
+bool checkBlack(){
+	bool hasBlack = false;
+	for (int y = cameraView.height/2.0; y < cameraView.height; y++) {  //Loop from middle to bottom
+		for (int x = cameraView.width/4.0; x < (cameraView.width/4.0) * 3; x++) { //Loop between 1/4 and 3/4
+			if(get_pixel(cameraView, y, x, 3) == 0){ //Check if the pixel is white
+				hasBlack = true;
+			}
+		}
+	}
+	
+	return hasBlack;
+}
+
+/*
+ * Function for checking if there is red in the camera view
+ */
 bool redCheck(){
 	bool hasRed = false;
 	for (int y = 0; y < cameraView.height; y++) { 
 		for (int x = 0; x < cameraView.width; x++) { 
-			if(get_pixel(cameraView, y, x, 0) > 230 && get_pixel(cameraView, y, x, 0) > max(get_pixel(cameraView, y, x, 1), get_pixel(cameraView, y, x, 2))){ //Check if the pixel is white
+			if(get_pixel(cameraView, y, x, 0) == 255 && get_pixel(cameraView, y, x, 1) == 0 && get_pixel(cameraView, y, x, 2) == 0){ //Check if the pixel is white
 				hasRed = true;
 			}
 		}
@@ -95,13 +108,13 @@ bool redCheck(){
 
 
 /*
- * Function to check if there is a maze line to the left
+ * Function to check if there is a maze wall to the left
  */
 bool leftWallCheck(){
 	bool hasRed = false;
 	for (int y = cameraView.height/2.0 + 10; y < cameraView.height; y++) { //Loop thorugh the height of the camera
 		for (int x = 0; x < 15; x++) { //Loop through the pixels from 0 to the width of the line
-			if(get_pixel(cameraView, y, x, 0) > 230 && get_pixel(cameraView, y, x, 0) > max(get_pixel(cameraView, y, x, 1), get_pixel(cameraView, y, x, 2)) * 2){ //Check if pixel is red
+			if(get_pixel(cameraView, y, x, 0) == 255 && get_pixel(cameraView, y, x, 1) == 0 && get_pixel(cameraView, y, x, 2) == 0){ //Check if pixel is red
 				hasRed = true;
 			}
 		}
@@ -110,11 +123,14 @@ bool leftWallCheck(){
 	return hasRed; //return if a line has been found
 }
 
+/*
+ * Function to check if the maze wall has been shifted to the right
+ */
 bool shiftedLeftWallCheck(){
 	bool hasRed = false;
 	for (int y = cameraView.height/2.0 + 10; y < cameraView.height; y++) { //Loop thorugh the height of the camera
 		for (int x = 15; x < 30; x++) { //Loop through the pixels from 0 to the width of the line
-			if(get_pixel(cameraView, y, x, 0) > 230 && get_pixel(cameraView, y, x, 0) > max(get_pixel(cameraView, y, x, 1), get_pixel(cameraView, y, x, 2)) * 2){ //Check if pixel is red
+			if(get_pixel(cameraView, y, x, 0) == 255 && get_pixel(cameraView, y, x, 1) == 0 && get_pixel(cameraView, y, x, 2) == 0){ //Check if pixel is red
 				hasRed = true;
 			}
 		}
@@ -123,11 +139,14 @@ bool shiftedLeftWallCheck(){
 	return hasRed; //return if a line has been found
 }
 
+/*
+ * Function to check if there is a maze wall infront of the robot
+ */
 bool frontWallCheck(){
 	bool hasRed = false;
-	for (int y = cameraView.height/2.0; y < cameraView.height/2.0 + 10; y++) { //Loop thorugh the height of the camera
-		for (int x = cameraView.width/4.0; x < (cameraView.width/4.0) * 3; x++) { //Loop through the pixels from 0 to the width of the line
-			if(get_pixel(cameraView, y, x, 0) > 230 && get_pixel(cameraView, y, x, 0) > max(get_pixel(cameraView, y, x, 1), get_pixel(cameraView, y, x, 2)) * 2){ //Check if pixel is red
+	for (int y = cameraView.height/2.0; y < cameraView.height/2.0 + 10; y++) { //Loop from half the height to half the height + 10 pixels
+		for (int x = cameraView.width/4.0; x < (cameraView.width/4.0) * 3; x++) { //Loop through the pixels from 1/4 to 3/4
+			if(get_pixel(cameraView, y, x, 0) == 255 && get_pixel(cameraView, y, x, 1) == 0 && get_pixel(cameraView, y, x, 2) == 0){ //Check if pixel is red
 				hasRed = true;
 			}
 		}
@@ -165,7 +184,7 @@ void senseDirection(double &XPOS, double &Right, double &Left){
 				Right = 40;
 			}
 		}
-		else if(redCheck){ //If there are no white lines check if there is red to follow
+		else if(redCheck()){ //If there are no white lines check if there is red to follow
 			mazeMode = true;
 		}
 		else{ //Else there is no red to follow so turn around to aquire the line again
@@ -192,17 +211,16 @@ int main() {
        bool turnLeft = false;
        bool turnRight = false;
        //Takes total white value and black + white pixel count.
-       camLoop(TOTAL, turnRight, turnLeft);
+       camLoop(TOTAL, turnRight, turnLeft, turningRight, turningLeft);
        //Takes the white pixel count to the right.
-       camLoop(RIGHT, turnRight, turnLeft);
+       camLoop(RIGHT, turnRight, turnLeft, turningRight, turningLeft);
        //Takes the white pixel count to the left.
-       camLoop(LEFT, turnRight, turnLeft);
+       camLoop(LEFT, turnRight, turnLeft, turningRight, turningLeft);
 
        double xPos = camVARS.totalXWhite / camVARS.whitePixelCount; //Calculate average x position of the line
-       camVARS.clear();
 
         //blackPixelCount <= 10 is checking if we have hit the flag yet.
-        if (camVARS.blackPixelCount <= 10) {
+        if (!checkBlack()) {
         	//Detects whether it is facing away from the line, or towards it.
         	senseDirection(xPos, vRight, vLeft);
             
@@ -242,6 +260,8 @@ int main() {
 		
         setMotors(vLeft, vRight); //Set the velocity of the motors
         usleep(10000); //Sleep for a time as to not spam the server
+        
+        camVARS.clear();
     }
 }
 
