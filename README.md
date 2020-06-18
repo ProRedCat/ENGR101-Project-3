@@ -47,27 +47,32 @@ Joud - Implementing further functionality. |
 [ALL] Writing report collectively through discord. |
 
 
+
+
+
+
+
 ##Guide to installation and running the Project.
 
-####Step (1)
+#### Step (1)
 Download the contents of this GitHub and unpack them in to a file.
 
-####Step (2)
+#### Step (2)
 Download and install the MingW64 compiler. This should be Linux and Windows compatible.
 The hyperlink is at: https://mingw-w64.org/doku.php/download
 
-####Step (3)
+#### Step (3)
 Download and unpack the SFML library in to the same directory as "AVC_Robot" and "AVC_Server".
 The hyperlink is at: https://www.sfml-dev.org/download.php
 Version as of writing this guide is 2.5.1. The directory should be called therefore: SFML-2.5.1
 
-####Step (4)
+#### Step (4)
 Compile server3.cpp in "AVC_Server" and robot.cpp in "AVC_Robot".
 The MingW command should be g++ [server3.cpp or robot.cpp] -I SFML-2.5.1/include -L SFML-2.5.1/lib -l sfml-window -l sfml-audio -l sfml-graphics -l sfml-system -l sfml-network -o [server3.exe or robot.exe]
 Also provided is a precompiled .exe in this GitHub, if that's easier.
 
 
-####Step (5)
+#### Step (5)
 Navigate to AVC_Server and start server3.exe **first**, and then navigate to AVC_Robot and start robot.exe after that.
 Find the opened executable called "Global view". This should run the the maze-navigating robot!
 Have fun!
