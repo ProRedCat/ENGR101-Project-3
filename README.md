@@ -1,9 +1,9 @@
 # ENGR101-Project-3
 Github for team project 3 for ENGR101
 
-##TEAM 3 PROJECT PLAN.
+## TEAM 3 PROJECT PLAN.
 
-####User info and roles:
+#### User info and roles:
 
 [Project Manager]
 RN: Sam Milburn, UN: milbursamu, ID: 300509843, E: sammilburn1916@gmail.com,
@@ -21,7 +21,7 @@ GitHub: Got-any-pizza
 RN: Joud Asfari, UN: asfarijoud, ID: 300448284, E: joudzasfari@gmail.com, 
 GitHub: cucumber-turtle
 
-####Plan Timeline
+#### Plan Timeline
 
 | Date | Objectives | Due date | Item due | Conflicts | Tasks|
 | --- | --- | --- | --- | --- | --- |
@@ -52,7 +52,7 @@ Joud - Implementing further functionality. |
 
 
 
-##Guide to installation and running the Project.
+## Guide to installation and running the Project.
 
 #### Step (1)
 Download the contents of this GitHub and unpack them in to a file.
