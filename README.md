@@ -83,7 +83,7 @@ Search “environment variables” on Windows start, and click “edit the syste
 
 ![environment variables](ReadMe_pictures/system_properties.png)
 
-![path variable](ReadMe_pictures/enviro_path.png)
+![path variable](ReadMe_pictures/enviro_path_LI.jpg)
 
 ![add bin to path](ReadMe_pictures/add_bin.png)
 
