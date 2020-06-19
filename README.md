@@ -55,24 +55,55 @@ Joud - Implementing further functionality. |
 ## Guide to installation and running the Project.
 
 #### Step (1)
-Download the contents of this GitHub and unpack them in to a file.
+Install SFML from: https://www.sfml-dev.org/download/sfml/2.5.1/  
+Choose GCC 7.3.0 MinGW (SEH) 64 bit, and extract into C: drive, then rename the file to SFML. 
+
+##### Note: SFML must be extracted to the C: drive and renamed to SFML, as the project MakeFile has the SFML directory as c:\\SFML
+##### If you place the SFML in a different directory, you should change the DIR in MakeFile to the directory of your SFML folder. 
+
+![Choose SFML](ReadMe_pictures/sfml_choose.png)
+
+![Change makefile](ReadMe_pictures/directory_make.png)
 
 #### Step (2)
-Download and install the MingW64 compiler. This should be Linux and Windows compatible.
-The hyperlink is at: https://mingw-w64.org/doku.php/download
+Install MinGW-W64 from: https://sourceforge.net/projects/mingw-w64/files/ 
+You can extract the MinGW-W64 file anywhere you want. When specifying the set up settings, you must make sure that you install MinGW version 8.1.0, architecture x86_64, threads posix, exception SEH, built revision 0. Choosing the right settings is very important!
+
+![mingw install](ReadMe_pictures/mingw_install.png)
+
+![settings](ReadMe_pictures/settings_setup.png)
 
 #### Step (3)
-Download and unpack the SFML library in to the same directory as "AVC_Robot" and "AVC_Server".
-The hyperlink is at: https://www.sfml-dev.org/download.php
-Version as of writing this guide is 2.5.1. The directory should be called therefore: SFML-2.5.1
+Open the MinGW file, then open the bin file inside it. Copy the directory.
+
+![bin](ReadMe_pictures/copy_bin.png)
 
 #### Step (4)
-Compile server3.cpp in "AVC_Server" and robot.cpp in "AVC_Robot".
-The MingW command should be g++ [server3.cpp or robot.cpp] -I SFML-2.5.1/include -L SFML-2.5.1/lib -l sfml-window -l sfml-audio -l sfml-graphics -l sfml-system -l sfml-network -o [server3.exe or robot.exe]
-Also provided is a precompiled .exe in this GitHub, if that's easier.
+Search “environment variables” on Windows start, and click “edit the system environment variables”. Click “environment variables” from the bottom right of the opened window. Look for the “path” variable from your user variables, then click “edit”. Now you have to click “new” and paste the directory of the MinGW bin file. Press ok on all windows.
 
+![environment variables](ReadMe_pictures/system_properties.png)
+
+![path variable](ReadMe_pictures/enviro_path.png)
+
+![add bin to path](ReadMe_pictures/add_bin.png)
 
 #### Step (5)
-Navigate to AVC_Server and start server3.exe **first**, and then navigate to AVC_Robot and start robot.exe after that.
-Find the opened executable called "Global view". This should run the the maze-navigating robot!
-Have fun!
+To download the needed files, go to the branch master and press the green “clone or download” button at the top right of the repository page, then download as zip. Extract the zip into a folder.
+
+#### Step (6)
+Open Geany. If you don’t have it installed then download it from here: https://www.geany.org/
+Press on the arrow next to the “build” button. At the bottom there will be an option to set build commands. Press that and change all the independent commands to start with mingw32-
+
+![build](ReadMe_pictures/build2.png)
+![set build commands](ReadMe_pictures/make_cmd.png)
+
+#### Step (7)
+Restart your computer.
+
+#### Step (8)
+Open server3.cpp in a Geany window, and robot.cpp in a separate Geany window. Click on the arrow next to the “build” button and press “make all” to compile the code (or do shift-F9). Do this on both files. Execute server3.cpp first (using the button next to the build button, or press F5), and then execute robot.cpp.  
+
+![execute server and robot](ReadMe_pictures/make_exe.png)
+
+#### Step (9)
+If you want to change the maze, open the config.txt file in AVC_Server and change to “challenge.txt”, “completion.txt”, or “core.txt”. Do NOT change anything else in this file.
